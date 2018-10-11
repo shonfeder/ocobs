@@ -1,0 +1,6 @@
+(test
+ (name tests)
+ (libraries qcheck
+            qcheck-alcotest
+            alcotest
+            ocobs))
