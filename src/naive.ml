@@ -39,9 +39,9 @@ let%test "inserting zeroes" =
   let num_zeroes = List.count ~f:Int.(equal 0) nums in
   num_zeroes = 2
   &&
-  List.equal ~equal:Int.equal (insert_zeroes [0]) [0]
+  List.equal Int.equal (insert_zeroes [0]) [0]
   &&
-  List.equal ~equal:Int.equal (insert_zeroes []) []
+  List.equal Int.equal (insert_zeroes []) []
 
 let encode ?(delim=0) bytes =
   let is_not_delim = Int.(<>) delim in
@@ -57,7 +57,7 @@ let encode ?(delim=0) bytes =
   |> encoder
 
 let%test "encodings" =
-  let (=) = List.equal ~equal:Int.equal in
+  let (=) = List.equal equal in
   encode [00] = [01;01;00]
   &&
   encode [00;00] = [01;01;01;00]
@@ -87,7 +87,7 @@ let decode ?(delim=0) bytes =
   decoder bytes
 
 let%test "decodings" =
-  let (=) = List.equal ~equal:Int.equal in
+  let (=) = List.equal Int.equal in
   decode [01;01;00] = [00]
   &&
   decode [01;01;01;00] = [00;00]
