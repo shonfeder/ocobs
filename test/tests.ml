@@ -39,7 +39,7 @@ module Test (Coder : Ocobs.Coder) = struct
       begin fun bs ->
         let initial_bytes = Coder.to_list bs in
         let coded_bytes = Coder.(bs |> encode |> decode |> to_list) in
-        List.equal ~equal:Int.equal coded_bytes initial_bytes
+        List.equal Int.equal coded_bytes initial_bytes
       end
   ]
 end

@@ -81,7 +81,7 @@ let precoded delim bytes =
   |> run
 
 let%test "precoded byte sequence identifies delimiting terms" =
-  let (=) = List.equal ~equal:Precoded.equal in
+  let (=) = List.equal Precoded.equal in
   let expected = Precoded.[
       {count = 1; data = Delim};
       {count = 1; data = Data 1};
@@ -111,7 +111,7 @@ let split_while ~f seq =
   (S.take_while ~f seq, S.drop_while_option ~f seq)
 
 let%test "split_while" =
-  let (=) = List.equal ~equal:Int.equal in
+  let (=) = List.equal Int.equal in
   let input = [1;2;3;4;5;6] in
   let expected = [1;2;3] in
   let expected_divider = 4 in
@@ -152,7 +152,7 @@ let encode ?(delim=0) bytes =
 
 let%test "encodings" =
   let encode bs = bs |> S.of_list |> encode |> S.to_list in
-  let (=) = List.equal ~equal:Int.equal
+  let (=) = List.equal Int.equal
   in
   encode [00] = [01;01;00]
   &&
@@ -200,7 +200,7 @@ let decode ?(delim=0) bytes =
 
 let%test "decodings" =
   let decode bs = bs |> S.of_list |> decode |> S.to_list in
-  let (=) = List.equal ~equal:Int.equal
+  let (=) = List.equal Int.equal
   in
   decode [01;01;00] = [00]
   &&
