@@ -10,7 +10,7 @@ type t = int list
 let to_list = List.to_list
 let of_list = List.of_list
 
-(* From wikipedia's description of the linked list conception of algorithm:
+(* From wikipedia's description of the linked list conception of the algorithm:
  *
  * > First, insert a zero byte at the beginning of the packet, and after every run of
  * > 254 non-zero bytes. This encoding is obviously reversible. It is not necessary
@@ -22,35 +22,42 @@ let of_list = List.of_list
  * > offset is guaranteed to be at most 255. *)
 
 let insert_zeroes xs =
-  let rec inserter count = function
-    | [] -> []
-    | 0 :: xs -> 0 :: inserter 0 xs
+  let rec inserter acc count = function
+    | [] -> 0 :: acc |> List.rev
     | x :: xs ->
       if count = 254 then
-        0 :: inserter 0 (x :: xs)
+        (* insert a zero, reset the count, and count on *)
+        inserter (0 :: acc) 0 (x :: xs)
+      else if x = 0 then
+        (* reset the count *)
+        inserter (x :: acc) 0 xs
       else
-        x :: inserter (count + 1) xs
+        (* count on *)
+        inserter (x :: acc) (count + 1) xs
   in
   (* We omit insertion of a leading 0, to make the encoding cleaner *)
-  inserter 0 xs
+  inserter [] 0 xs
 
 let%test "inserting zeroes" =
   let nums = List.range 1 (255 * 2) |> insert_zeroes in
   let num_zeroes = List.count ~f:Int.(equal 0) nums in
-  num_zeroes = 2
+  num_zeroes = 3
   &&
-  List.equal Int.equal (insert_zeroes [0]) [0]
+  List.equal Int.equal (insert_zeroes [0]) [0;0]
   &&
-  List.equal Int.equal (insert_zeroes []) []
+  List.equal Int.equal (insert_zeroes []) [0]
 
+exception TODO
 let encode ?(delim=0) bytes =
   let is_not_delim = Int.(<>) delim in
   let rec encoder bytes =
     let chunk, rest = List.split_while ~f:is_not_delim bytes in
     let count = List.length chunk + 1 in
     match rest with
+    | [0]        -> count :: bytes (* Bytes includes a null terminated final sequence *)
     | _ :: rest' -> count :: chunk @ encoder rest'
-    | []         -> count :: chunk @ [0]
+    (* insert_zeroes should always ensure the sequence has an ending 0 *)
+    | []         -> raise TODO (* Replace with error type  *)
   in
   bytes
   |> insert_zeroes
@@ -58,6 +65,8 @@ let encode ?(delim=0) bytes =
 
 let%test "encodings" =
   let (=) = List.equal equal in
+  encode [] = [01; 00]
+  &&
   encode [00] = [01;01;00]
   &&
   encode [00;00] = [01;01;01;00]
