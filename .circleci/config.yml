@@ -11,14 +11,6 @@ jobs:
           name: Install Package Dependencies
           command: opam install . --with-test -y
 
-      # - run:
-      #     name: Install Testing Dependencies
-      #     command: opam install qcheck alcotest qcheck-alcotest -y
-
-      # - run:
-      #     name: Build
-      #     command: dune build
-
       - run:
           name: Run tests
           command: |
