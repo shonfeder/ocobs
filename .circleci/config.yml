@@ -7,6 +7,12 @@ jobs:
     steps:
       - checkout
 
+      # TODO(shon): This shouldn't be necessary, as dune is supposed to be
+      # on this container already
+      - run:
+          name: Install Dune
+          command: opam install dune
+
       - run:
           name: Install Package Dependencies
           command: opam install . --deps-only -y
