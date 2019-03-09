@@ -1,0 +1,33 @@
+opam-version: "2.0"
+name: "ocobs"
+version: "0.1"
+synopsis: "Consistent Overhead Byte Stuffing (COBS) for OCaml"
+description: """
+Consistent Overhead Byte Stuffing (COBS) is a framing method for binary
+streams and is useful any time you need to send binary datagrams over a
+stream interface (TCP socket / Serial Port / Etc).
+
+This package provides a simple library for encoding and decoding using
+COBS.
+"""
+maintainer: "Shon Feder <shon.feder@gmail.com>"
+authors: "Shon Feder <shon.feder@gmail.com>"
+license: "TBD"
+homepage: "https://github.com/shonfeder/ocobs/"
+bug-reports: "https://github.com/shonfeder/ocobs/issues"
+dev-repo: "git+https://github.com/shonfeder/ocobs.git"
+depends: [ "ocaml" { build }
+           "ocamlfind" { build }
+           "dune" { build & >= "1.5.0" }
+           "base" { >= "0.12.0" }
+           "stdio"
+           "ppx_inline_test"
+           "ppx_jane"
+           "ppx_deriving"
+           "qcheck" { with-test }
+           "qcheck-alcotest" { with-test }
+           "alcotest" { with-test }
+  ]
+build: [
+  ["dune" "build" "-p" name]
+]
