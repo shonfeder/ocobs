@@ -10,26 +10,30 @@
     > breakdown of the algorithm, please see
     > https://en.wikipedia.org/wiki/Consistent_Overhead_Byte_Stuffing
 
-    Copied from {{: https://github.com/keyme/nim_cobs} nim_cobs} *)
+    Copied from {{: https://github.com/keyme/nim_cobs} nim_cobs}
+*)
+
 open! Base
 
 (** A coder can encode and decode a collections of bytes.
-    The bytes are currently just represented by [int]s. *)
+    The bytes are currently just represented by [int]s.
+*)
 module type Coder = sig
   (** The base type of a collection of bytes.
 
       The type is left opaque in the specification, so that implementations of
       [Coder] have the option to represent the bytes in any way they wish.
-      However, the implementations currently provided here expose their
-      underlying representation. *)
+  *)
   type t
 
   (** [encode ?delim bytes] is the cobs encoding of the [bytes], using the
-      delimiter [delim]. [delim] defaults to [0]. *)
+      delimiter [delim]. [delim] defaults to [0].
+  *)
   val encode : ?delim:int -> t -> t
 
   (** [decode ?delim bytes] is the decoding of the cobs encoded [bytes], using
-      the delimiter [delim]. [delim] defaults to [0]. *)
+      the delimiter [delim]. [delim] defaults to [0].
+  *)
   val decode : ?delim:int -> t -> t
 
   val of_list : int list -> t
@@ -43,8 +47,8 @@ end
 
     Real world usage should probably favor {!Seqs}.
 
-    NOTE: Currently failing on an edge case in which the 255th of the input
-    data is a [0]*)
+    This implementation expose its underlying representation.
+*)
 module Naive : Coder with type t = int list
 
 (** An implementation of the COBS encoding algorithm using [Base]'s
@@ -52,5 +56,8 @@ module Naive : Coder with type t = int list
     (when squinting to blur out the bind operators, the encoding and decoding
     algorithms are essentially the same), but the codings should only take time
     linear on the length of the input. Additionally, it computes its bytes on
-    demand, making it a good fit for operating on streams of data *)
+    demand, making it a good fit for operating on streams of data
+
+    This implementation expose its underlying representation.
+*)
 module Seqs : Coder with type t = int Sequence.t
