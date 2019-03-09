@@ -47,7 +47,9 @@ let%test "inserting zeroes" =
   &&
   List.equal Int.equal (insert_zeroes []) [0]
 
-exception TODO
+(* TODO(shon): Remove if non-empty lists are used *)
+exception Impossible
+
 let encode ?(delim=0) bytes =
   let is_not_delim = Int.(<>) delim in
   let rec encoder bytes =
@@ -57,7 +59,7 @@ let encode ?(delim=0) bytes =
     | [0]        -> count :: bytes (* Bytes includes a null terminated final sequence *)
     | _ :: rest' -> count :: chunk @ encoder rest'
     (* insert_zeroes should always ensure the sequence has an ending 0 *)
-    | []         -> raise TODO (* Replace with error type  *)
+    | []         -> raise Impossible
   in
   bytes
   |> insert_zeroes
