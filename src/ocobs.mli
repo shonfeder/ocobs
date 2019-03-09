@@ -10,7 +10,8 @@
     > breakdown of the algorithm, please see
     > https://en.wikipedia.org/wiki/Consistent_Overhead_Byte_Stuffing
 
-    Copied from {{: https://github.com/keyme/nim_cobs} nim_cobs}
+    The above is excerpted from {{: https://github.com/keyme/nim_cobs} nim_cobs},
+    which was the inspiration for this package.
 *)
 
 open! Base
