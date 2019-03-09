@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    environment:
+      OCAMLVER: 4.07
+
+    docker:
+      - image: tmcgilchrist/ci-ocaml:ubuntu_xenial-4.04
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install Package Dependencies
+          command: opam install . --deps-only -y
+
+      - run:
+          name: Install Testing Dependencies
+          command: opam install qcheck alcotest qcheck-alcotest -y
+
+      - run:
+          name: Build
+          command: |
+            eval $(opam env)
+            dune build
+
+      - run:
+          name: Run tests
+          command: |
+            eval $(opam env)
+            dune runtest
