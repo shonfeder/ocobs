@@ -19,11 +19,13 @@ dev-repo: "git+https://github.com/shonfeder/ocobs.git"
 depends: [ "ocaml" { build }
            "ocamlfind" { build }
            "dune" { build & >= "1.5.0" }
+
            "base" { >= "0.12.0" }
            "stdio"
            "ppx_inline_test"
            "ppx_jane"
            "ppx_deriving"
+
            "qcheck" { with-test }
            "qcheck-alcotest" { with-test }
            "alcotest" { with-test }
